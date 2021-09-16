@@ -1,0 +1,10 @@
+.project-list {
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.new-project-button {
+  margin-left: 4px;
+  margin-top: 20px;
+}

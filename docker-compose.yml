@@ -1,0 +1,82 @@
+version: "3.7"
+services:
+    discovery-service:
+        build:
+            context: ./discoveryserver
+        image: gitlab.lrz.de:5005/ase-group-4.3/onlineide/discovery-service:latest
+        restart: on-failure
+        ports:
+            - 8761:8761
+    
+    database:
+        image: postgres:9.6
+        environment:
+            - POSTGRES_DB=project_db
+            - POSTGRES_PASSWORD=test
+            - POSTGRES_USER=admin
+    
+    project-service:
+        build:
+            context: ./project
+        image: gitlab.lrz.de:5005/ase-group-4.3/onlineide/project-service:latest
+        restart: on-failure
+        depends_on:
+            - database
+            - discovery-service
+        environment:
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/project_db
+            - EUREKA_SERVER=http://discovery-service:8761/eureka
+        ports:
+            - 8091:8091
+    
+    darkmode-service:
+        build:
+            context: ./dark-mode
+        image: gitlab.lrz.de:5005/ase-group-4.3/onlineide/darkmode-service:latest
+        restart: on-failure
+        depends_on:
+            - discovery-service
+        environment:
+            - EUREKA_SERVER=http://discovery-service:8761/eureka
+        ports:
+            - 8092:8092
+    
+    compiler-service:
+        build:
+            context: ./compiler
+        image: gitlab.lrz.de:5005/ase-group-4.3/onlineide/compiler-service:latest
+        restart: on-failure
+        depends_on:
+            - discovery-service
+        environment:
+            - EUREKA_SERVER=http://discovery-service:8761/eureka
+        ports:
+            - 8090:8090
+    
+    ui-service:
+        build:
+            context: ./ui
+        image: gitlab.lrz.de:5005/ase-group-4.3/onlineide/ui-service:latest
+        restart: on-failure
+        depends_on:
+            - discovery-service
+        environment:
+            - EUREKA_SERVER=http://discovery-service:8761/eureka
+        ports:
+            - 8080:8080
+            
+    api-gateway:
+        build:
+            context: ./api-gateway
+        image: gitlab.lrz.de:5005/ase-group-4.3/onlineide/api-gateway-service:latest
+        restart: on-failure
+        depends_on:
+            - discovery-service
+            - ui-service
+            - compiler-service
+            - project-service
+            - darkmode-service
+        environment:
+            - EUREKA_SERVER=http://discovery-service:8761/eureka
+        ports:
+            - 8000:8000

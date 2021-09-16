@@ -1,0 +1,14 @@
+.login-screen {
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.welcome-text {
+  text-align: center;
+}
+
+.buttons {
+  text-align: center;
+  margin-top: 20px;
+}

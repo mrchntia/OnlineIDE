@@ -1,0 +1,10 @@
+.source-file-list {
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.new-source-file-button {
+  margin-left: 4px;
+  margin-top: 20px;
+}

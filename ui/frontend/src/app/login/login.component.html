@@ -1,0 +1,9 @@
+<div class="login-screen">
+  <h1 class="welcome-text">Welcome to Group 4-3's OnlineIDE!</h1>
+  <div class="buttons">
+    <button *ngIf="!(authService.authenticated | async)" mat-raised-button (click)="authService.login()">Login
+    </button>
+    <button *ngIf="(authService.authenticated | async)" mat-raised-button (click)="this.navigateToProjectList()">Open IDE
+    </button>
+  </div>
+</div>

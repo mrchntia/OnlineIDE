@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: compiler-service
+server:
+  port: ${PORT:8090}
+  # needs to be added as zuul is set up and requires to have frontend-service to have /ui URL
+  servlet:
+    context-path: /compiler
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}

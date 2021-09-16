@@ -1,0 +1,8 @@
+<mat-toolbar color="primary">
+  <span>OnlineIDE</span>
+  <button class="logout-button" *ngIf="(authService.authenticated | async)"
+          mat-raised-button (click)="authService.logout()">Logout
+  </button>
+</mat-toolbar>
+
+<router-outlet></router-outlet>

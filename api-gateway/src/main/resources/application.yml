@@ -1,0 +1,60 @@
+spring.jpa.show-sql: true
+
+security:
+  oauth2:
+    client:
+      clientId: 46b9fb266f5bcd1983b13ca58efc4828ec10840baa187897e795f8ab8bb40309
+      clientSecret: 1289528e1cce42d837ee7e43f164ec9a528db41a6731cee0e35bdc7e64071f91
+      accessTokenUri: https://gitlab.lrz.de/oauth/token
+      userAuthorizationUri: https://gitlab.lrz.de/oauth/authorize
+      scope:
+        - read_user
+        - api
+    resource:
+      userInfoUri: https://gitlab.lrz.de/api/v4/user
+
+
+spring:
+#  profiles:
+#    active: "dev"
+  application:
+    name: gateway-service
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+server:
+  port: ${PORT:8000}
+zuul.host.socket-timeout-millis: 20000
+zuul.host.connect-timeout-millis: 20000
+ribbon.ConnectTimeout: 10000
+ribbon.ReadTimeout: 10000
+zuul:
+  # disabling automatic adding of services into Zuul by setting ignored-services to *
+  # https://cloud.spring.io/spring-cloud-netflix/multi/multi_router_and_filter_zuul.html#netflix-zuul-reverse-proxy
+  ignored-services: "*"
+  routes:
+    project-service:
+      path: "/project/**"
+      service-id: project-service
+      strip-prefix: false
+      sensitiveHeaders: Cookie, Set-Cookie #Authentication - sensitive headers for accessing gitlab api are handed over
+    ui-service:
+      path: "/ui/**"
+      service-id: ui-service
+      strip-prefix: false
+    compiler-service:
+      path: "/compiler/**"
+      service-id: compiler-service
+      strip-prefix: false
+    darkmode-service:
+      path: "/darkmode/**"
+      service-id: darkmode-service
+      strip-prefix: false
+
+proxy:
+  auth:
+    routes:
+      project-service: oauth2
+
+

@@ -1,0 +1,7 @@
+.editor {
+  height: 70vh; /* vh: Viewport Height, % of screen height */
+}
+
+.output {
+  height: 20vh;
+}

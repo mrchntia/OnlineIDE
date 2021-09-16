@@ -1,0 +1,31 @@
+<div class="source-file-list">
+  <mat-list>
+    <h2>{{project.name}}</h2>
+
+    <button mat-raised-button (click)="shareProjectViaDialog(project.name)">
+    Share
+    </button>
+
+    <!-- *ngFor... creates and dynamically updates a list entry for every sourceFiles element -->
+    <mat-list-item *ngFor="let sourceFile of sourceFiles; last as last">
+      <mat-icon mat-list-icon color="primary">description</mat-icon>
+      <h3 mat-line>{{sourceFile.name}}</h3> <!-- align file name with icon / center of row -->
+      <button mat-stroked-button color="primary" (click)="navigateToEditor(sourceFile)">
+        <mat-icon>folder_open</mat-icon>
+      </button>
+      <button mat-stroked-button color="primary" (click)="renameSourceFileViaDialog(sourceFile)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-stroked-button color="warn" (click)="deleteSourceFileViaDialog(sourceFile)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <mat-divider *ngIf="!last"></mat-divider> <!-- horizontal line after all rows except last one -->
+    </mat-list-item>
+  </mat-list>
+
+  <div class="new-source-file-button">
+    <button mat-fab color="primary" (click)="createNewSourceFileViaDialog()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>

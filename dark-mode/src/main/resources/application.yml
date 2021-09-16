@@ -1,0 +1,12 @@
+spring:
+    application:
+        name: darkmode-service
+server:
+    port: ${PORT:8092}
+    # needs to be added as zuul is set up and requires to have frontend-service to have /ui URL
+    servlet:
+        context-path: /darkmode
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}

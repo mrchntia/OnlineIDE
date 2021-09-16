@@ -1,0 +1,91 @@
+image: maven:3.6.3-jdk-11
+
+variables:
+    MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+    MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+
+cache:
+    paths:
+        - .m2/repository
+
+stages:
+    - build
+    - test
+    - package
+    - publish
+    - deploy
+
+build:
+    stage: build
+    script:
+        - 'apt-get update'
+        - 'curl -sL https://deb.nodesource.com/setup_14.x | bash'
+        - 'apt-get install -y nodejs'
+        - 'npm install --global @angular/cli'
+        - 'mvn clean compile'
+    
+test:
+    stage: test
+    script:
+        - 'curl -sL https://deb.nodesource.com/setup_14.x | bash'
+        - 'apt-get install -y nodejs'
+        - 'npm install --global @angular/cli'
+        - 'apt-get -yq update'
+        - 'apt-get -yq install gcc'
+        - 'mvn test'
+    services:
+        - postgres:9.6
+    variables:
+        SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres/project_db"
+        POSTGRES_DB: "project_db"
+        POSTGRES_PASSWORD: "test"
+        POSTGRES_USER: "admin"
+    
+package:
+    stage: package
+    script:
+        - 'curl -sL https://deb.nodesource.com/setup_14.x | bash'
+        - 'apt-get install -y nodejs'
+        - 'npm install --global @angular/cli'
+        - 'mvn package -DskipTests=true'
+    artifacts:
+        paths:
+            - "*/target/*.jar"
+    only:
+        refs:
+            - master
+            
+publish:
+    stage: publish
+    image: docker:stable
+    services:
+        - docker:18-dind
+    script:
+        - apk add --no-cache docker-compose
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker-compose build --pull
+        - docker-compose push
+    variables:
+        DOCKER_DRIVER: overlay2
+        DOCKER_HOST: tcp://docker:2375
+    only:
+        refs:
+            - master
+        
+deploy:
+    stage: deploy
+    image: ubuntu:18.04
+    script:
+        - 'which ssh-agent || (apt-get update -y && apt-get install openssh-client -y)'
+        - eval $(ssh-agent -s)
+        - mkdir -p ~/.ssh
+        - chmod 700 ~/.ssh
+        - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+        - scp -o "StrictHostKeyChecking=no" -r docker-compose.prod.yml $SSH_HOST:~/
+        - ssh -o "StrictHostKeyChecking=no" $SSH_HOST "sudo docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+        - ssh -o "StrictHostKeyChecking=no" $SSH_HOST "sudo docker-compose -f docker-compose.prod.yml pull && sudo docker-compose -f docker-compose.prod.yml up --force-recreate -d"
+    variables:
+        SSH_HOST: humig@35.232.224.68
+    only:
+        refs:
+            - master

@@ -1,0 +1,26 @@
+<div class="project-list">
+  <mat-list>
+    <h2>Projects</h2>
+    <!-- *ngFor... creates and dynamically updates a list entry for every projects element -->
+    <mat-list-item *ngFor="let project of projects; last as last">
+      <mat-icon mat-list-icon color="primary">folder</mat-icon> <!-- folder symbol, not text -->
+      <h3 mat-line>{{project.name}}</h3> <!-- align project name with icon / center of row -->
+      <button mat-stroked-button color="primary" (click)="navigateToSourceFileList(project)">
+        <mat-icon>folder_open</mat-icon>
+      </button>
+      <button mat-stroked-button color="primary" (click)="renameProjectViaDialog(project)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-stroked-button color="warn" (click)="deleteProjectViaDialog(project)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <mat-divider *ngIf="!last"></mat-divider> <!-- horizontal line after all rows except last one -->
+    </mat-list-item>
+  </mat-list>
+
+  <div class="new-project-button">
+    <button mat-fab color="primary" (click)="createNewProjectViaDialog()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>

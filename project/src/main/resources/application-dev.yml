@@ -1,0 +1,39 @@
+security:
+  oauth2:
+    client:
+      clientId: 6bfa61f1d7bc9e1e4d8efe14c08f64dd16802304f2da62673242b10737a8b263
+      clientSecret: fc873ef27d04f5016b2ddf46ef10fb8157c0042bd3f9e46fe0b0d086e2a34a9e
+      accessTokenUri: https://gitlab.lrz.de/oauth/token
+      userAuthorizationUri: https://gitlab.lrz.de/oauth/authorize
+      scope:
+        - read_user
+        - api
+    resource:
+      userInfoUri: https://gitlab.lrz.de/api/v4/user
+
+spring:
+  datasource:
+    url: "jdbc:h2:mem:my_db"
+    driverClassName: "org.h2.Driver"
+    username: "admin"
+    password: "test"
+  jpa:
+    properties:
+      hibernate:
+        dialect: "org.hibernate.dialect.H2Dialect"  # Specifying the SQL dialect makes Hibernate generate better SQL for the chosen database
+        ddl-auto: "update"
+        jdbc:
+          lob:
+            non_contextual_creation: true	  # fixes Hibernate issue: https://github.com/spring-projects/spring-boot/issues/12007
+
+  application:
+    name: project-service
+server:
+  port: ${PORT:8091}
+  # needs to be added as zuul is set up and requires to have frontend-service to have /ui URL
+  servlet:
+    context-path: /project
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}

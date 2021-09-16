@@ -1,0 +1,23 @@
+<div>
+  <button mat-stroked-button color="primary" (click)="saveSourceFile()">
+    Save
+  </button>
+  <button mat-stroked-button color="primary" (click)="saveAndCompileSourceFile()">
+    Save & Compile
+  </button>
+</div>
+
+<div class="editor">
+  <ngx-monaco-editor style="height: 100%"
+                     [options]="editorOptions" [(ngModel)]="sourceFile.sourceCode"></ngx-monaco-editor>
+</div>
+
+<div class="output">
+  <mat-card>
+    <mat-card-title>Output</mat-card-title>
+    <mat-card-content>
+      {{compilationResult.stdout}}
+      {{compilationResult.stderr}}
+    </mat-card-content>
+  </mat-card>
+</div>

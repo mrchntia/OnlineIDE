@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Create New {{typeName}}</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input matInput [(ngModel)]="newItemName">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button (click)="onCancel()">Cancel</button>
+  <button mat-stroked-button (click)="onOk()">Create</button>
+</div>
+

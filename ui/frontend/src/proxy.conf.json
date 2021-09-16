@@ -1,0 +1,70 @@
+{
+  "/all-projects": {
+    "target": "http://localhost:8091",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/all-projects": ""
+    }
+  },
+  "/create-project": {
+    "target": "http://localhost:8091",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/delete-project": {
+    "target": "http://localhost:8091",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/read-project": {
+    "target": "http://localhost:8091",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/update-project-name": {
+    "target": "http://localhost:8091",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/create-source-file": {
+    "target": "http://localhost:8091",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/all-source-files": {
+    "target": "http://localhost:8091",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/delete-source-file": {
+    "target": "http://localhost:8091",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/update-source-file-name": {
+    "target": "http://localhost:8091",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/update-source-file-code": {
+    "target": "http://localhost:8091",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/compile": {
+    "target": "http://localhost:8090",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/dark-mode": {
+    "target": "http://localhost:8092",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/api-gateway": {
+    "target": "http://localhost:8080",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}

@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: ui-service
+server:
+  port: ${PORT:8080}
+  # needs to be added as zuul is set up and requires to have frontend-service to have /ui URL
+  servlet:
+    context-path: /ui
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}

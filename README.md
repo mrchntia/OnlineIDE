@@ -3,7 +3,7 @@
 Simple online integrated development environment (IDE) built with microservices using the Spring framework. Features include:
 - ability to connect to a microcontroller to toggle dark mode
 - projects and files stored in a database (PostgreSQL)
-- can compile code in Java and C
+- code compilation in Java and C
 - UI developed with Angular
 - authentication and authorization via OAuth (LRZ)
 - shared projects between users
